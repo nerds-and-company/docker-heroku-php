@@ -5,12 +5,12 @@ FROM heroku/heroku:16
 ENV PORT 3000
 
 # Which versions?
-ENV PHP_VERSION 7.1.3
-ENV REDIS_EXT_VERSION 3.1.2
+ENV PHP_VERSION 7.1.8
+ENV REDIS_EXT_VERSION 3.1.3
 ENV HTTPD_VERSION 2.4.20
 ENV NGINX_VERSION 1.8.1
-ENV NODE_ENGINE 6.11.1
-ENV COMPOSER_VERSION 1.4.1
+ENV NODE_ENGINE 6.11.2
+ENV COMPOSER_VERSION 1.4.2
 
 # Create some needed directories
 RUN mkdir -p /app/.heroku/php /app/.heroku/node /app/.profile.d
