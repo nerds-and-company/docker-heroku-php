@@ -1,5 +1,6 @@
 # Inherit from Heroku's stack
 FROM heroku/heroku:16
+MAINTAINER Bob Olde Hampsink <b.oldehampsink@nerds.company>
 
 # Internally, we arbitrarily use port 3000
 ENV PORT 3000
