@@ -8,9 +8,10 @@ ENV PORT 3000
 # Which versions?
 ENV PHP_VERSION 7.1.8
 ENV REDIS_EXT_VERSION 3.1.3
+ENV IMAGICK_EXT_VERSION 3.4.3
 ENV HTTPD_VERSION 2.4.20
 ENV NGINX_VERSION 1.8.1
-ENV NODE_ENGINE 6.11.2
+ENV NODE_ENGINE 6.11.3
 ENV COMPOSER_VERSION 1.4.2
 
 # Create some needed directories
@@ -44,6 +45,7 @@ RUN curl --silent --location https://lang-php.s3.amazonaws.com/dist-heroku-16-st
 RUN mkdir -p /app/.heroku/php/etc/php/conf.d
 RUN curl --silent --location https://raw.githubusercontent.com/heroku/heroku-buildpack-php/5a770b914549cf2a897cbbaf379eb5adf410d464/conf/php/php.ini > /app/.heroku/php/etc/php/php.ini
 RUN curl --silent --location https://lang-php.s3.amazonaws.com/dist-heroku-16-stable/extensions/no-debug-non-zts-20160303/redis-$REDIS_EXT_VERSION.tar.gz | tar xz -C /app/.heroku/php
+RUN curl --silent --location https://lang-php.s3.amazonaws.com/dist-heroku-16-stable/extensions/no-debug-non-zts-20160303/imagick-$IMAGICK_EXT_VERSION.tar.gz | tar xz -C /app/.heroku/php
 # Enable all optional exts
 RUN echo "\n\
 user_ini.cache_ttl = 30 \n\
@@ -58,6 +60,7 @@ extension=mbstring.so \n\
 extension=mcrypt.so \n\
 extension=pcntl.so \n\
 extension=redis.so \n\
+extension=imagick.so \n\
 extension=shmop.so \n\
 extension=soap.so \n\
 extension=sqlite3.so \n\
