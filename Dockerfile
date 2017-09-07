@@ -69,8 +69,12 @@ extension=xmlrpc.so \n\
 extension=xsl.so\n\
 " >> /app/.heroku/php/etc/php/php.ini
 
-# Install MySQL client
-RUN apt-get update && apt-get install -y mysql-client
+# Add source for yarn
+RUN curl -sS http://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+RUN echo "deb http://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+
+# Install dependencies
+RUN apt-get update && apt-get install -y mysql-client yarn
 
 # Install Composer
 RUN curl --silent --location https://lang-php.s3.amazonaws.com/dist-heroku-16-stable/composer-$COMPOSER_VERSION.tar.gz | tar xz -C /app/.heroku/php
@@ -86,9 +90,9 @@ ONBUILD RUN composer install --no-scripts --no-suggest
 # require the buildpack for execution
 ONBUILD RUN composer show heroku/heroku-buildpack-php || { echo 'Your composer.json must have "heroku/heroku-buildpack-php" as a "require-dev" dependency.'; exit 1; }
 
-# Run npm install if package.json is present
+# Run yarn install if package.json is present
 ONBUILD ADD package.json /app/user/
-ONBUILD RUN /app/.heroku/node/bin/npm install
+ONBUILD RUN yarn install --no-progress
 
 # rest of app
 ONBUILD ADD . /app/user/
