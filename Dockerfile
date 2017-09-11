@@ -90,9 +90,10 @@ ONBUILD RUN composer install --no-scripts --no-suggest
 # require the buildpack for execution
 ONBUILD RUN composer show heroku/heroku-buildpack-php || { echo 'Your composer.json must have "heroku/heroku-buildpack-php" as a "require-dev" dependency.'; exit 1; }
 
-# Run yarn install if package.json is present
-ONBUILD ADD package.json /app/user/
-ONBUILD RUN yarn install --no-progress
+# run npm or yarn install
+# add yarn.lock to .slugignore in your project
+ONBUILD ADD package.json yarn.* /app/user/
+ONBUILD RUN [ -f yarn.lock ] && yarn install --no-progress || npm install
 
 # rest of app
 ONBUILD ADD . /app/user/
