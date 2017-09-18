@@ -12,7 +12,7 @@ ENV IMAGICK_EXT_VERSION 3.4.3
 ENV HTTPD_VERSION 2.4.20
 ENV NGINX_VERSION 1.8.1
 ENV NODE_ENGINE 6.11.3
-ENV COMPOSER_VERSION 1.5.1
+ENV COMPOSER_VERSION 1.5.2
 
 # Create some needed directories
 RUN mkdir -p /app/.heroku/php /app/.heroku/node /app/.profile.d
@@ -87,7 +87,7 @@ RUN curl -s https://s3pository.heroku.com/node/v$NODE_ENGINE/node-v$NODE_ENGINE-
 ONBUILD ADD composer.lock /app/user/
 ONBUILD ADD composer.json /app/user/
 # run install but without scripts as we don't have the app source yet
-ONBUILD RUN composer install --no-scripts --no-suggest
+ONBUILD RUN composer install --prefer-dist --no-scripts --no-suggest
 # require the buildpack for execution
 ONBUILD RUN composer show heroku/heroku-buildpack-php || { echo 'Your composer.json must have "heroku/heroku-buildpack-php" as a "require-dev" dependency.'; exit 1; }
 
