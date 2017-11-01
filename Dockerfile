@@ -93,7 +93,7 @@ ONBUILD RUN composer show heroku/heroku-buildpack-php || { echo 'Your composer.j
 
 # run npm or yarn install
 # add yarn.lock to .slugignore in your project
-ONBUILD ADD package.json yarn.* /app/user/
+ONBUILD ADD package*.json yarn.* /app/user/
 ONBUILD RUN [ -f yarn.lock ] && yarn install --no-progress || npm install
 
 # rest of app
