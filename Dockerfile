@@ -70,6 +70,9 @@ extension=xmlrpc.so \n\
 extension=xsl.so\n\
 " >> /app/.heroku/php/etc/php/php.ini
 
+# Install Node
+RUN curl -s https://s3pository.heroku.com/node/v$NODE_ENGINE/node-v$NODE_ENGINE-linux-x64.tar.gz | tar --strip-components=1 -xz -C /app/.heroku/node
+
 # Add source for yarn
 RUN curl -sS http://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
 RUN echo "deb http://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
@@ -79,9 +82,6 @@ RUN apt-get update && apt-get install -y mysql-client yarn
 
 # Install Composer
 RUN curl --silent --location https://lang-php.s3.amazonaws.com/dist-heroku-16-stable/composer-$COMPOSER_VERSION.tar.gz | tar xz -C /app/.heroku/php
-
-# Install Node
-RUN curl -s https://s3pository.heroku.com/node/v$NODE_ENGINE/node-v$NODE_ENGINE-linux-x64.tar.gz | tar --strip-components=1 -xz -C /app/.heroku/node
 
 # copy dep files first so Docker caches the install step if they don't change
 ONBUILD ADD composer.lock /app/user/
