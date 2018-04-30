@@ -6,13 +6,13 @@ MAINTAINER Bob Olde Hampsink <b.oldehampsink@nerds.company>
 ENV PORT 3000
 
 # Which versions?
-ENV PHP_VERSION 7.1.16
-ENV REDIS_EXT_VERSION 3.1.6
+ENV PHP_VERSION 7.1.17
+ENV REDIS_EXT_VERSION 4.0.2
 ENV IMAGICK_EXT_VERSION 3.4.3
 ENV HTTPD_VERSION 2.4.29
 ENV NGINX_VERSION 1.8.1
 ENV NODE_ENGINE 8.11.1
-ENV COMPOSER_VERSION 1.6.3
+ENV COMPOSER_VERSION 1.6.4
 
 # Create some needed directories
 RUN mkdir -p /app/.heroku/php /app/.heroku/node /app/.profile.d
