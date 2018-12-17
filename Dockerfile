@@ -1,18 +1,18 @@
 # Inherit from Heroku's stack
 FROM heroku/heroku:16
-MAINTAINER Bob Olde Hampsink <b.oldehampsink@nerds.company>
+MAINTAINER Nerds & Company
 
 # Internally, we arbitrarily use port 3000
 ENV PORT 3000
 
 # Which versions?
-ENV PHP_VERSION 7.1.18
-ENV REDIS_EXT_VERSION 4.0.2
+ENV PHP_VERSION 7.3.0
+ENV REDIS_EXT_VERSION 4.2.0
 ENV IMAGICK_EXT_VERSION 3.4.3
-ENV HTTPD_VERSION 2.4.33
+ENV HTTPD_VERSION 2.4.37
 ENV NGINX_VERSION 1.8.1
-ENV NODE_ENGINE 8.11.3
-ENV COMPOSER_VERSION 1.6.5
+ENV NODE_ENGINE 8.14.0
+ENV COMPOSER_VERSION 1.8.0
 
 # Create some needed directories
 RUN mkdir -p /app/.heroku/php /app/.heroku/node /app/.profile.d
@@ -39,13 +39,22 @@ RUN echo "\n\
 user nobody root;\n\
 " >> /app/.heroku/php/etc/nginx/nginx.conf
 
+# Install Chrome WebDriver
+RUN CHROMEDRIVER_VERSION=`curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE` \
+ && mkdir -p /opt/chromedriver-$CHROMEDRIVER_VERSION \
+ && curl -sS -o /tmp/chromedriver_linux64.zip http://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip \
+ && unzip -qq /tmp/chromedriver_linux64.zip -d /opt/chromedriver-$CHROMEDRIVER_VERSION \
+ && rm /tmp/chromedriver_linux64.zip \
+ && chmod +x /opt/chromedriver-$CHROMEDRIVER_VERSION/chromedriver \
+ && ln -fs /opt/chromedriver-$CHROMEDRIVER_VERSION/chromedriver /usr/local/bin/chromedriver
+
 # Install PHP
 RUN curl --silent --location https://lang-php.s3.amazonaws.com/dist-heroku-16-stable/php-$PHP_VERSION.tar.gz | tar xz -C /app/.heroku/php
 # Config
 RUN mkdir -p /app/.heroku/php/etc/php/conf.d
 RUN curl --silent --location https://raw.githubusercontent.com/heroku/heroku-buildpack-php/5a770b914549cf2a897cbbaf379eb5adf410d464/conf/php/php.ini > /app/.heroku/php/etc/php/php.ini
-RUN curl --silent --location https://lang-php.s3.amazonaws.com/dist-heroku-16-stable/extensions/no-debug-non-zts-20160303/redis-$REDIS_EXT_VERSION.tar.gz | tar xz -C /app/.heroku/php
-RUN curl --silent --location https://lang-php.s3.amazonaws.com/dist-heroku-16-stable/extensions/no-debug-non-zts-20160303/imagick-$IMAGICK_EXT_VERSION.tar.gz | tar xz -C /app/.heroku/php
+RUN curl --silent --location https://lang-php.s3.amazonaws.com/dist-heroku-16-stable/extensions/no-debug-non-zts-20180731/redis-$REDIS_EXT_VERSION.tar.gz | tar xz -C /app/.heroku/php
+RUN curl --silent --location https://lang-php.s3.amazonaws.com/dist-heroku-16-stable/extensions/no-debug-non-zts-20180731/imagick-$IMAGICK_EXT_VERSION.tar.gz | tar xz -C /app/.heroku/php
 # Enable all optional exts
 RUN echo "\n\
 user_ini.cache_ttl = 30 \n\
