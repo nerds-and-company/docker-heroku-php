@@ -67,7 +67,6 @@ extension=gd.so\n\
 extension=gettext.so \n\
 extension=intl.so \n\
 extension=mbstring.so \n\
-extension=mcrypt.so \n\
 extension=pcntl.so \n\
 extension=redis.so \n\
 extension=imagick.so \n\
