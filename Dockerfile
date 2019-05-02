@@ -1,5 +1,5 @@
 # Inherit from Heroku's stack
-FROM heroku/heroku:16
+FROM heroku/heroku:18
 MAINTAINER Nerds & Company
 
 # Internally, we arbitrarily use port 3000
