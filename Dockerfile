@@ -87,7 +87,7 @@ RUN curl -sS http://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
 RUN echo "deb http://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
 
 # Install dependencies
-RUN apt-get update && apt-get install -y mysql-client yarn
+RUN apt-get update && apt-get install -y mysql-client yarn libpng-dev
 
 # Install Composer
 RUN curl --silent --location https://lang-php.s3.amazonaws.com/dist-heroku-$HEROKU_CEDAR_VERSION-stable/composer-$COMPOSER_VERSION.tar.gz | tar xz -C /app/.heroku/php
