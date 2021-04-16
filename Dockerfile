@@ -1,19 +1,20 @@
 # Inherit from Heroku's stack
-FROM heroku/heroku:18
+FROM heroku/heroku:20
 MAINTAINER Nerds & Company
 
 # Internally, we arbitrarily use port 3000
 ENV PORT 3000
 
-# Which versions?
-ENV HEROKU_CEDAR_VERSION 18
-ENV PHP_VERSION 7.2.25
-ENV REDIS_EXT_VERSION 4.2.0
-ENV IMAGICK_EXT_VERSION 3.4.3
-ENV HTTPD_VERSION 2.4.41
-ENV NGINX_VERSION 1.8.1
+# Which versions? --> https://github.com/heroku/heroku-buildpack-php/blob/main/CHANGELOG.md
+ENV HEROKU_CEDAR_VERSION 20
+ENV PHP_VERSION 7.4.16
+ENV REDIS_EXT_VERSION 5.3.4
+ENV IMAGICK_EXT_VERSION 3.4.4
+ENV HTTPD_VERSION 2.4.43
+ENV NGINX_VERSION 1.18.0
 ENV NODE_ENGINE 8.14.0
-ENV COMPOSER_VERSION 1.8.0
+ENV COMPOSER_VERSION 1.10.21
+ENV MCRYPT_EXT_VERSION 1.0.4
 
 # Create some needed directories
 RUN mkdir -p /app/.heroku/php /app/.heroku/node /app/.profile.d
@@ -23,7 +24,7 @@ WORKDIR /app/user
 ENV PATH /app/.heroku/php/bin:/app/.heroku/php/sbin:/app/.heroku/node/bin/:/app/user/node_modules/.bin:/app/user/vendor/bin:$PATH
 
 # Install Apache
-RUN curl --silent --location https://lang-php.s3.amazonaws.com/dist-heroku-$HEROKU_CEDAR_VERSION-stable/apache-$HTTPD_VERSION.tar.gz | tar xz -C /app/.heroku/php
+RUN curl --silent --location https://lang-php.s3.amazonaws.com/dist-heroku-18-stable/apache-$HTTPD_VERSION.tar.gz | tar xz -C /app/.heroku/php
 # Config
 RUN curl --silent --location https://raw.githubusercontent.com/heroku/heroku-buildpack-php/5a770b914549cf2a897cbbaf379eb5adf410d464/conf/apache2/httpd.conf.default > /app/.heroku/php/etc/apache2/httpd.conf
 # FPM socket permissions workaround when run as root
@@ -54,8 +55,9 @@ RUN curl --silent --location https://lang-php.s3.amazonaws.com/dist-heroku-$HERO
 # Config
 RUN mkdir -p /app/.heroku/php/etc/php/conf.d
 RUN curl --silent --location https://raw.githubusercontent.com/heroku/heroku-buildpack-php/5a770b914549cf2a897cbbaf379eb5adf410d464/conf/php/php.ini > /app/.heroku/php/etc/php/php.ini
-RUN curl --silent --location https://lang-php.s3.amazonaws.com/dist-heroku-$HEROKU_CEDAR_VERSION-stable/extensions/no-debug-non-zts-20180731/redis-$REDIS_EXT_VERSION.tar.gz | tar xz -C /app/.heroku/php
-RUN curl --silent --location https://lang-php.s3.amazonaws.com/dist-heroku-$HEROKU_CEDAR_VERSION-stable/extensions/no-debug-non-zts-20180731/imagick-$IMAGICK_EXT_VERSION.tar.gz | tar xz -C /app/.heroku/php
+# https://github.com/heroku/heroku-buildpack-php/blob/main/support/build/README.md#hosting-a-proprietary-extension-using-custom-tooling
+RUN curl --silent --location https://lang-php.s3.amazonaws.com/dist-heroku-$HEROKU_CEDAR_VERSION-stable/extensions/no-debug-non-zts-20190902/redis-$REDIS_EXT_VERSION.tar.gz | tar xz -C /app/.heroku/php
+RUN curl --silent --location https://lang-php.s3.amazonaws.com/dist-heroku-$HEROKU_CEDAR_VERSION-stable/extensions/no-debug-non-zts-20190902/imagick-$IMAGICK_EXT_VERSION.tar.gz | tar xz -C /app/.heroku/php
 # Enable all optional exts
 RUN echo "\n\
 user_ini.cache_ttl = 30 \n\
